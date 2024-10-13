@@ -43,16 +43,25 @@ void setupBT() {
 
   a2dp_sink.set_stream_reader(read_data_stream, false);
 
-  a2dp_sink.set_volume_control(&VolC);
+  volume.setVolumeControl(lvc);
 
   // setup output
   auto cfg = i2s.defaultConfig();
   cfg.copyFrom(info);
-  //cfg.signal_type = PDM;
+  //
   cfg.pin_data = 23;
   cfg.buffer_count = 8;
   cfg.buffer_size = 256;
+  
+  if (PDM_OUTPUT) {
+    cfg.signal_type = PDM;
+  } else {
+    cfg.signal_type = Digital;
+  }
+  
   i2s.begin(cfg);
+  convert.begin(16, 32);
+  volume.begin(cfg);
 
 }
 
@@ -61,19 +70,24 @@ void parseIRCommand(uint32_t irCode) {
     case IR_CMD_PLAY_PAUSE:
       if (isPlaying) {
         a2dp_sink.pause();
+        Serial.println(Playing);
       } else {
         a2dp_sink.play();
+        Serial.println(Playing);
       }
       isPlaying = !isPlaying;
       break;
     case IR_CMD_VOLUME_UP:
-      a2dp_sink.set_volume(volume++);
+      volume.setVolume((volume.volume() + VOLUME_STEP));
+      Serial.println(volume.volume());
       break;
     case IR_CMD_VOLUME_DOWN:
-      a2dp_sink.set_volume(volume--);
+      volume.setVolume((volume.volume() - VOLUME_STEP));
+      Serial.println(volume.volume());
       break;
-      case IR_CMD_VOLUME_MUTE:
-      a2dp_sink.set_volume(0);
+    case IR_CMD_VOLUME_MUTE:
+      volume.setVolume(0.0);
+      Serial.println(volume.volume());
       break;
     case IR_CMD_FORWARD:
       a2dp_sink.next();

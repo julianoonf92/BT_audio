@@ -3,12 +3,15 @@
 
 #include "variables.h"
 
-// Define custom characters for play and pause icons
+// Define custom characters for play, pause and volume icons
 uint8_t playIcon[8] = {
- 0xc1,0x71,0x1d,0x07,0x07,0x1d,0x71,0xc1 };
+ 0xe0,0xb8,0x8e,0x83,0x83,0x8e,0xb8,0xe0 };
 
 uint8_t pauseIcon[8] = {
  0xc3,0xc3,0xc3,0xc3,0xc3,0xc3,0xc3,0xc3 };
+
+uint8_t volIcon[8] = {
+ 0x18,0x04,0x52,0xc9,0xc9,0x52,0x04,0x18 };
 
 void setupDisplay() {
   // Initialize the OLED display
@@ -70,10 +73,13 @@ void updateDisplay() {
   display.printf("%02d:%02d / %02d:%02d", played / 60, played % 60, duration / 60, duration % 60);
   // Display play/pause icon based on the current state
   if (isPlaying) {
-    display.drawBitmap(100, 56, playIcon, 8, 8, WHITE);
+    display.drawBitmap(84, 56, playIcon, 8, 8, WHITE);
   } else {
-    display.drawBitmap(100, 56, pauseIcon, 8, 8, WHITE);
+    display.drawBitmap(84, 56, pauseIcon, 8, 8, WHITE);
   }
+  display.drawBitmap(100, 56, volIcon, 8, 8, WHITE);
+  display.setCursor(112, 56);
+  display.print(static_cast<int>(volume.volume() * 10));
 
   display.display();
 }

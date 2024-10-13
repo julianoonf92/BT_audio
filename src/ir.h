@@ -28,6 +28,7 @@ void decodeIR(){
   if (IrReceiver.available()) {
     IrReceiver.initDecodedIRData(); // is required, if we do not call decode();
     IrReceiver.decode();
+    IrReceiver.printIRResultShort(&Serial);
     irCode = IrReceiver.decodedIRData.command;
     parseIRCommand(irCode);
     IrReceiver.resume();
