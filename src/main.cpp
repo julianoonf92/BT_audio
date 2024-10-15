@@ -7,8 +7,12 @@
 
 void setup() {
   Serial.begin(115200);
+
+  AudioLogger::instance().begin(Serial, AudioLogger::Info);
+  
   Wire.begin(22, 18);
   pinMode(RELAY_PIN, OUTPUT);
+  a2dp_sink.disconnect();
 
   PDM_OUTPUT = false;
   setupDisplay();

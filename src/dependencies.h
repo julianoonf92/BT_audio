@@ -14,10 +14,10 @@
 #define SCREEN_HEIGHT 64
 #define OLED_RESET    -1
 
-#define RELAY_PIN 15
+#define RELAY_PIN 14
 
 // IR parameters
-#define IR_RECEIVER_PIN 13
+#define IR_RECEIVER_PIN 12
 #define DECODE_NEC
 //#define DECODE_DISTANCE_WIDTH
 //#define DECODE_HASH
@@ -32,5 +32,5 @@
 #define IR_CMD_BACKWARD 0x40
 #define IR_CMD_POWER 0x45
 
-// Volume parameters
+// Sound parameters
 #define VOLUME_STEP 0.1
