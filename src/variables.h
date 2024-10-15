@@ -13,17 +13,17 @@ uint32_t durTime = 0;
 uint32_t playtime = 0;
 uint32_t duration;
 uint32_t played;
+uint16_t sample_rate;
 
 const int charLimit = 21;
 
 // Variables for Audio data
 I2SStream i2s;
-NumberFormatConverterStream convert(i2s);
-VolumeStream volume(convert);
+VolumeStream volume(i2s);
 BluetoothA2DPSink a2dp_sink(volume);
 
 LogarithmicVolumeControl lvc(0.2);
-AudioInfo info(44100, 2, 32);
+AudioInfo info(48000, 2, 32);
 
 esp_avrc_playback_stat_t Playing;
 bool isPlaying;
