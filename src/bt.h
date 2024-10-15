@@ -1,6 +1,7 @@
 #ifndef BT_H
 #define BT_H
 
+
 #include "display.h"
 
 void avrc_metadata_callback(uint8_t id, const uint8_t *text) {
@@ -22,6 +23,10 @@ void avrc_metadata_callback(uint8_t id, const uint8_t *text) {
   updateDisplay();
 }
 
+void sampleRateCallback(uint16_t rate) {
+  sample_rate = rate;
+}
+
 void read_data_stream(const uint8_t *data, uint32_t length) {
   i2s.write(data, length);
 }
@@ -35,33 +40,36 @@ void playbackStatusCallback(esp_avrc_playback_stat_t Playing) {
 }
 
 void setupBT() {
-
   a2dp_sink.set_avrc_metadata_attribute_mask(ESP_AVRC_MD_ATTR_TITLE | ESP_AVRC_MD_ATTR_ARTIST | ESP_AVRC_MD_ATTR_ALBUM | ESP_AVRC_MD_ATTR_PLAYING_TIME );
   a2dp_sink.set_avrc_metadata_callback(avrc_metadata_callback);
   a2dp_sink.set_avrc_rn_playstatus_callback(playbackStatusCallback);
   a2dp_sink.set_avrc_rn_play_pos_callback(playPositionCallback, 1);
-
+  a2dp_sink.set_sample_rate_callback(sampleRateCallback);
   a2dp_sink.set_stream_reader(read_data_stream, false);
 
   volume.setVolumeControl(lvc);
 
-  // setup output
+  // Setup output
   auto cfg = i2s.defaultConfig();
-  cfg.copyFrom(info);
-  //
-  cfg.pin_data = 23;
+  cfg.bits_per_sample = I2S_BITS_PER_SAMPLE_32BIT;
+  cfg.sample_rate = 48000;
+  cfg.channels = 2;
   cfg.buffer_count = 8;
-  cfg.buffer_size = 256;
-  
+  cfg.buffer_size = 512;
+  cfg.pin_ws = 15;
+  cfg.pin_bck = 14;
+  cfg.pin_data = 25;
+  cfg.pin_data_rx = 26;
+  cfg.pin_mck = 0;
+
   if (PDM_OUTPUT) {
     cfg.signal_type = PDM;
   } else {
     cfg.signal_type = Digital;
   }
-  
-  i2s.begin(cfg);
-  convert.begin(16, 32);
+
   volume.begin(cfg);
+  i2s.begin(cfg);
 
 }
 
