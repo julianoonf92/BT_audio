@@ -51,8 +51,8 @@ void setupBT() {
 
   // Setup output
   auto cfg = i2s.defaultConfig();
-  cfg.bits_per_sample = I2S_BITS_PER_SAMPLE_32BIT;
-  cfg.sample_rate = 48000;
+  cfg.bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT;
+  cfg.sample_rate = 44100;
   cfg.channels = 2;
   cfg.buffer_count = 8;
   cfg.buffer_size = 512;

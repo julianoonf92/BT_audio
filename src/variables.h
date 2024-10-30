@@ -23,7 +23,7 @@ VolumeStream volume(i2s);
 BluetoothA2DPSink a2dp_sink(volume);
 
 LogarithmicVolumeControl lvc(0.2);
-AudioInfo info(48000, 2, 32);
+AudioInfo info(44100, 2, 32);
 
 esp_avrc_playback_stat_t Playing;
 bool isPlaying;

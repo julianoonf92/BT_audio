@@ -15,6 +15,8 @@
 #define OLED_RESET    -1
 
 #define RELAY_PIN 14
+#define sdaPin 22
+#define sclPin 18
 
 // IR parameters
 #define IR_RECEIVER_PIN 12

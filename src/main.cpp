@@ -18,7 +18,7 @@ void setup() {
 
   AudioLogger::instance().begin(Serial, AudioLogger::Info);
   
-  Wire.begin(22, 18);
+  Wire.begin(sdaPin, sclPin); //SDA, SCL
   pinMode(RELAY_PIN, OUTPUT);
   a2dp_sink.disconnect();
 
