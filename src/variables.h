@@ -25,6 +25,9 @@ BluetoothA2DPSink a2dp_sink(volume);
 LogarithmicVolumeControl lvc(0.2);
 AudioInfo info(44100, 2, 32);
 
+Preferences preferences;
+float newVolume;
+
 esp_avrc_playback_stat_t Playing;
 bool isPlaying;
 bool PDM_OUTPUT;

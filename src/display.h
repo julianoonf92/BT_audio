@@ -19,6 +19,7 @@ void setupDisplay() {
     Serial.println(F("SSD1306 allocation failed"));
     for (;;); // Don't proceed, loop forever
   }
+  display.setRotation(2);
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(WHITE);

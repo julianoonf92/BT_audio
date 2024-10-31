@@ -59,7 +59,7 @@ void setupBT() {
   cfg.pin_ws = 15;      //LCK
   cfg.pin_bck = 14;     //BCK
   cfg.pin_data = 25;    //DIN
-  cfg.pin_data_rx = 26; 
+  cfg.pin_data_rx = 26; //MIC
   cfg.pin_mck = 0;      //SCK
 
   if (PDM_OUTPUT) {
@@ -88,10 +88,14 @@ void parseIRCommand(uint32_t irCode) {
     case IR_CMD_VOLUME_UP:
       volume.setVolume((volume.volume() + VOLUME_STEP));
       Serial.println(volume.volume());
+      newVolume = volume.volume();
+      preferences.putFloat("volume", newVolume);
       break;
     case IR_CMD_VOLUME_DOWN:
       volume.setVolume((volume.volume() - VOLUME_STEP));
       Serial.println(volume.volume());
+      newVolume = volume.volume();
+      preferences.putFloat("volume", newVolume);
       break;
     case IR_CMD_VOLUME_MUTE:
       volume.setVolume(0.0);

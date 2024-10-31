@@ -35,5 +35,10 @@ void decodeIR(){
   }
 }
 
+void saveVolume(float newVolume) {
+  preferences.putFloat("volume", newVolume);
+  volume.setVolume(newVolume);
+}
+
 
 #endif // IR_H

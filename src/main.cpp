@@ -30,7 +30,9 @@ void setup() {
   Serial.print(F("Ready to receive IR signals of protocols: "));
   printActiveIRProtocols(&Serial);
 
-  volume.setVolume(0.3);
+  preferences.begin("audio", false);  // Open the namespace "audio" in read-write mode
+  float newVolume = preferences.getFloat("volume", 0.3);  // Default to 0.3 if not set
+  volume.setVolume(newVolume);
   
   a2dp_sink.set_auto_reconnect(true, 10);
   a2dp_sink.start("NiceAmp"); // Start Bluetooth Audio Receiver
