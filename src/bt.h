@@ -46,10 +46,8 @@ void setupBT() {
   a2dp_sink.set_avrc_rn_play_pos_callback(playPositionCallback, 1);
   a2dp_sink.set_sample_rate_callback(sampleRateCallback);
   a2dp_sink.set_stream_reader(read_data_stream, false);
+  a2dp_sink.set_volume_control(&vc);
 
-  volume.setVolumeControl(lvc);
-
-  // Setup output
   auto cfg = i2s.defaultConfig();
   cfg.bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT;
   cfg.sample_rate = 44100;
@@ -68,7 +66,6 @@ void setupBT() {
     cfg.signal_type = Digital;
   }
 
-  volume.begin(cfg);
   i2s.begin(cfg);
 
 }
@@ -86,20 +83,26 @@ void parseIRCommand(uint32_t irCode) {
       isPlaying = !isPlaying;
       break;
     case IR_CMD_VOLUME_UP:
-      volume.setVolume((volume.volume() + VOLUME_STEP));
-      Serial.println(volume.volume());
-      newVolume = volume.volume();
+      newVolume = min(127, a2dp_sink.get_volume() + (127/100)*5);
+      a2dp_sink.set_volume(newVolume);
       preferences.putFloat("volume", newVolume);
+      Serial.print(a2dp_sink.get_volume());
       break;
     case IR_CMD_VOLUME_DOWN:
-      volume.setVolume((volume.volume() - VOLUME_STEP));
-      Serial.println(volume.volume());
-      newVolume = volume.volume();
+      newVolume = (a2dp_sink.get_volume() > 5) ? a2dp_sink.get_volume() - ((127/100)*5) : 0;
+      a2dp_sink.set_volume(newVolume);
       preferences.putFloat("volume", newVolume);
+      Serial.print(a2dp_sink.get_volume());
       break;
     case IR_CMD_VOLUME_MUTE:
-      volume.setVolume(0.0);
-      Serial.println(volume.volume());
+      if (a2dp_sink.get_volume() > 0) {
+        volMute = a2dp_sink.get_volume();
+        a2dp_sink.set_volume(0);
+        Serial.println(a2dp_sink.get_volume());
+      }else{
+        a2dp_sink.set_volume(volMute);
+        Serial.println(a2dp_sink.get_volume());
+      }
       break;
     case IR_CMD_FORWARD:
       a2dp_sink.next();

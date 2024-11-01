@@ -72,15 +72,18 @@ void updateDisplay() {
   // Display formatted duration on one line
   display.setCursor(0, 56);
   display.printf("%02d:%02d / %02d:%02d", played / 60, played % 60, duration / 60, duration % 60);
+
   // Display play/pause icon based on the current state
   if (isPlaying) {
     display.drawBitmap(84, 56, playIcon, 8, 8, WHITE);
   } else {
     display.drawBitmap(84, 56, pauseIcon, 8, 8, WHITE);
   }
+
+  // Display volume level on the right side of the display
   display.drawBitmap(100, 56, volIcon, 8, 8, WHITE);
   display.setCursor(112, 56);
-  display.print(static_cast<int>(volume.volume() * 10));
+  display.print(a2dp_sink.get_volume ());
 
   display.display();
 }

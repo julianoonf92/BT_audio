@@ -2,6 +2,7 @@
 #define VARIABLES_H
 
 #include "dependencies.h"
+#include "volume_control.h"
 
 // Variables for display information
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
@@ -19,20 +20,19 @@ const int charLimit = 21;
 
 // Variables for Audio data
 I2SStream i2s;
-VolumeStream volume(i2s);
-BluetoothA2DPSink a2dp_sink(volume);
-
-LogarithmicVolumeControl lvc(0.2);
+BluetoothA2DPSink a2dp_sink(i2s);
+A2DPLogarithmicVolumeControl vc(0.2);
 AudioInfo info(44100, 2, 32);
-
-Preferences preferences;
-float newVolume;
 
 esp_avrc_playback_stat_t Playing;
 bool isPlaying;
 bool PDM_OUTPUT;
+double volMute;
+float  newVolume;
 
 // IR commands
 uint32_t irCode;
+
+Preferences preferences;
 
 #endif // VARIABLES_H

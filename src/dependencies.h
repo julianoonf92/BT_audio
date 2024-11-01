@@ -36,4 +36,4 @@
 #define IR_CMD_POWER 0x45
 
 // Sound parameters
-#define VOLUME_STEP 0.1
+#define VOLUME_STEP 0.5
